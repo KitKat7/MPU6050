@@ -76,7 +76,14 @@ int main(int argc, char** argv)
     double zf = -0.00191181153059;
 
     tf::Quaternion orientation(xf, yf, zf, wf);
-
+    tf::Matrix3x3 R1(orientation);
+    
+    tf::Vector3 t1 = R1.getRow(0);
+    std::cout << t1.getX() << " " << t1.getY() << " "<< t1.getZ() << std::endl;
+    tf::Vector3 t2 = R1.getRow(1);
+    std::cout << t2.getX() << " " << t2.getY() << " "<< t2.getZ() << std::endl;
+    tf::Vector3 t3 = R1.getRow(2);
+    std::cout << t3.getX() << " " << t3.getY() << " "<< t3.getZ() << std::endl;
     //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
     tf::Quaternion differential_rotation;
     differential_rotation = orientation * zero_orientation.inverse() ;
