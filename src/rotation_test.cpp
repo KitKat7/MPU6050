@@ -36,6 +36,7 @@ int main(int argc, char** argv)
   int data_packet_start;
 
   tf::Quaternion orientation;
+  std::cout << orientation.length() << std::endl;
   // tf::Quaternion zero_orientation(-0.00698190182447, 0.0570745244622, -0.799500692636, 0.597906243056);
   tf::Quaternion zero_orientation(0.604959480464, -0.795489951968, -0.0175491012633, 0.0301001854241);
 
@@ -76,11 +77,38 @@ int main(int argc, char** argv)
     double zf = -0.00191181153059;
 
     tf::Quaternion orientation(xf, yf, zf, wf);
+    tf::Matrix3x3 R1(orientation);
+   
+    tf::Vector3 p0(0.8, -2, 1);
+    // std::cout << p << std::endl;
+    tf::Quaternion q2 = zero_orientation * orientation.inverse();
+    R1 = tf::Matrix3x3(q2);
 
+    tf::Vector3 t1 = R1.getRow(0);
+    std::cout << "R1" << std::endl;
+    std::cout << t1.getX() << " " << t1.getY() << " "<< t1.getZ() << std::endl;
+    tf::Vector3 t2 = R1.getRow(1);
+    std::cout << t2.getX() << " " << t2.getY() << " "<< t2.getZ() << std::endl;
+    tf::Vector3 t3 = R1.getRow(2);
+    std::cout << t3.getX() << " " << t3.getY() << " "<< t3.getZ() << std::endl;
+
+    std::cout << "After R1" << std::endl;
+    tf::Vector3 p = R1*tf::quatRotate(orientation, p0);
+    std::cout << p.x() << " " << p.y() << " " << p.z() << std::endl;
+
+    std::cout << "zero_orientation" << std::endl;
+    p = tf::quatRotate(zero_orientation, p0);
+    std::cout << p.x() << " " << p.y() << " " << p.z() << std::endl;
+    
+    t1 = R1.getRow(0);
+    std::cout << t1.getX() << " " << t1.getY() << " "<< t1.getZ() << std::endl;
+    t2 = R1.getRow(1);
+    std::cout << t2.getX() << " " << t2.getY() << " "<< t2.getZ() << std::endl;
+    t3 = R1.getRow(2);
+    std::cout << t3.getX() << " " << t3.getY() << " "<< t3.getZ() << std::endl;
     //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
     tf::Quaternion differential_rotation;
     differential_rotation = orientation * zero_orientation.inverse() ;
-
     // calculate measurement time
     ros::Time measurement_time = ros::Time::now() + ros::Duration(time_offset_in_seconds);
 

@@ -1,6 +1,13 @@
-mpu6050_serial_to_imu
-=
+# serial_to_imu
+---
+Codes for Arduino (for MPU 6050 and MPU9250) and simple ROS subscriber and rotation test are included.
 
+Launch ```demo.launch``` after ```catkin_make```, a visualization problem of IMU in rviz will appear.
+
+```rotation_test``` is a ROS program for simple test of rotation for the quaternions from IMU.
+
+## Initial README from https://github.com/fsteinhardt/mpu6050_serial_to_imu
+---
 This is a simple ROS node to connect an InvenSense MPU 6050 IMU  (I used a cheap GY-521 breakout board) to ROS.
 
 It uses an arduino running a program using the [i2cdevlib](http://www.i2cdevlib.com/) from Jeff Rowberg to read the measurements from the MPU6050 sensor and send them to the computer. The ROS node reads the IMU data from the arduinos serial port and publishes the linear accelerations, rotational velocities and the orientation as a ROS [sensor_msgs/Imu](http://docs.ros.org/api/sensor_msgs/html/msg/Imu.html) message. The covariances in this message can be set using parameters. The orientation can also be broadcast as a [tf transform](http://wiki.ros.org/tf).
@@ -9,7 +16,7 @@ The arduino script uses the MPU6050 DMP (digital motion processor?) to get filte
 
 
 Setup
-=
+---
 
 See http://diyhacking.com/arduino-mpu-6050-imu-sensor-tutorial/ for the electrical connections and how to setup the i2cdevlib.
 
@@ -85,4 +92,3 @@ The launchfile demo.launch is included to start the node and display some imu va
 * **`orientation_stddev`** (double, default: 0.0)
 
 	Sets the orientation_covariance matrix diagonal elements.
-
