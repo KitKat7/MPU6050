@@ -1,0 +1,60 @@
+<!-- -*- mode: XML -*- -->
+<!-- run IMU and Velodyne -->
+
+<launch>
+
+  <!-- Setup -->
+  <arg name="imu_port" default="/dev/ttyACM0" />
+  <arg name="gps_port" default="/dev/ttyACM1" />
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find mpu6050_serial_to_imu)/rviz/IMU_VLP16.rviz" required="false"/>
+
+  <!-- declare arguments with default values -->
+  <arg name="calibration" default="$(find velodyne_pointcloud)/params/VLP16db.yaml"/>
+  <arg name="device_ip" default="" />
+  <arg name="frame_id" default="velodyne" />
+  <arg name="manager" default="$(arg frame_id)_nodelet_manager" />
+  <arg name="max_range" default="130.0" />
+  <arg name="min_range" default="0.4" />
+  <arg name="pcap" default="" />
+  <arg name="port" default="2368" />
+  <arg name="read_fast" default="false" />
+  <arg name="read_once" default="false" />
+  <arg name="repeat_delay" default="0.0" />
+  <arg name="rpm" default="600.0" />
+
+  <!-- start IMU -->
+  <node pkg="mpu6050_serial_to_imu" type="mpu6050_serial_to_imu_node" name="mpu6050_serial_to_imu_node" required="true">
+    <param name="port" value="$(arg imu_port)" />
+    <param name="frame_id" value="$(arg frame_id)"/>
+  </node>
+
+  <!-- start GPS -->
+  <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" required="true">
+    <param name="_port" value="$(arg gps_port)" />
+    <param name="frame_id" value="$(arg frame_id)" />
+  </node>
+
+  <!-- start nodelet manager and driver nodelets -->
+  <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
+    <arg name="device_ip" value="$(arg device_ip)"/>
+    <arg name="frame_id" value="$(arg frame_id)"/>
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="model" value="VLP16"/>
+    <arg name="pcap" value="$(arg pcap)"/>
+    <arg name="port" value="$(arg port)"/>
+    <arg name="read_fast" value="$(arg read_fast)"/>
+    <arg name="read_once" value="$(arg read_once)"/>
+    <arg name="repeat_delay" value="$(arg repeat_delay)"/>
+    <arg name="rpm" value="$(arg rpm)"/>
+  </include>
+
+  <!-- start cloud nodelet -->
+  <include file="$(find velodyne_pointcloud)/launch/cloud_nodelet_half.launch">
+    <arg name="calibration" value="$(arg calibration)"/>
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="max_range" value="$(arg max_range)"/>
+    <arg name="min_range" value="$(arg min_range)"/>
+  </include>
+
+</launch>
