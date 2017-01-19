@@ -6,6 +6,9 @@ Launch ```demo.launch``` after ```catkin_make```, a visualization problem of IMU
 
 ```rotation_test``` is a ROS program for simple test of rotation for the quaternions from IMU.
 
+## Change the rate of IMU
+Modify the very last item "0x01" on line 306 in ```./arduino/libraries/MPU9150/MPU9150_9Axis_MotionApps41.h``` to change the rate of IMU.
+
 ## Initial README from https://github.com/fsteinhardt/mpu6050_serial_to_imu
 ---
 This is a simple ROS node to connect an InvenSense MPU 6050 IMU  (I used a cheap GY-521 breakout board) to ROS.
