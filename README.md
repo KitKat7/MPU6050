@@ -2,7 +2,7 @@
 ---
 Codes for Arduino (for MPU 6050 and MPU9250) and simple ROS subscriber and rotation test are included.
 
-Launch ```demo.launch``` after ```catkin_make```, a visualization problem of IMU in rviz will appear.
+Launch ```demo.launch``` after ```catkin_make```, a visualization of IMU in rviz will appear.
 
 ```rotation_test``` is a ROS program for simple test of rotation for the quaternions from IMU.
 
